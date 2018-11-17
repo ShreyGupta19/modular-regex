@@ -2,23 +2,13 @@ import re
 
 MOD_EXP_FORMAT = r'~<([a-z]+)>'
 
-def lazy_property(fn):
-  attr_name = '_lazy_' + fn.__name__
-
-  @property
-  def _lazy_property(self):
-    if not hasattr(self, attr_name):
-      setattr(self, attr_name, fn(self))
-    return getattr(self, attr_name)
-  return _lazy_property
-
 class ModExpEnv:
   def __init__(self, lazy=False):
     self._expressions = {}
     self.lazy = lazy
 
   def get_regex(self, name):
-    return self._expressions[name].regex
+    return self._expressions[name].regex()
 
 class ModExp:
   def __init__(self, regex_str, name, env=None):
