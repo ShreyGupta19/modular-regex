@@ -8,6 +8,8 @@ class ModExpEnv:
   def get_regex(self, name):
     return self._expressions[name].regex()
 
+  def _has_cycles(self, name):
+    return any(name in self._expressions[dep].dependencies for dep in self._expressions[name].dependencies)
 
 MOD_EXP_ENV_GLOBAL = ModExpEnv()
 MOD_EXP_FORMAT = r'~<([A-Za-z0-9\_\.\-]+)>'
@@ -42,6 +44,9 @@ class ModExp:
         return regex
 
       self._compiled_regex = re.sub(MOD_EXP_FORMAT, lookup_expr, self.raw_regex)
-      self._propagate_changes()
+      if self.env._has_cycles(self.name):
+        raise ValueError('Definition of {} introduces cycle in Modular Regex.'.format(self.name))
+      else:
+        self._propagate_changes()
 
     return self._compiled_regex
