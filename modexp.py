@@ -10,6 +10,7 @@ class ModExpEnv:
 
 
 MOD_EXP_ENV_GLOBAL = ModExpEnv()
+MOD_EXP_FORMAT = r'~<([A-Za-z0-9\_\.\-]+)>'
 
 class ModExp:
   def __init__(self, regex_str, name, env=None):
@@ -36,7 +37,7 @@ class ModExp:
           raise KeyError('Modular Expression \'{}\'not found.'.format(expr_name))
         self.dependencies.add(expr_name)
         child_modexp = self.env._expressions[expr_name]
-        regex = child_modexp.regex()
+        regex = '(' + child_modexp.regex() + ')'
         self.dependencies |= child_modexp.dependencies
         return regex
 
