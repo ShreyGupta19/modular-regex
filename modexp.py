@@ -1,7 +1,5 @@
 import re
 
-MOD_EXP_FORMAT = r'~<([a-z]+)>'
-
 class ModExpEnv:
   def __init__(self, lazy=False):
     self._expressions = {}
@@ -10,12 +8,15 @@ class ModExpEnv:
   def get_regex(self, name):
     return self._expressions[name].regex()
 
+
+MOD_EXP_ENV_GLOBAL = ModExpEnv()
+
 class ModExp:
   def __init__(self, regex_str, name, env=None):
     self.raw_regex = regex_str
     self.name = name
     self.dependencies = set()
-    self.env = env if env is not None else ModExpEnv()
+    self.env = env if env is not None else MOD_EXP_ENV_GLOBAL
     self.env._expressions[name] = self
     self._compiled_regex = None
 
