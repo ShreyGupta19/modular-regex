@@ -8,6 +8,9 @@ class ModExpEnv:
   def get_regex(self, name):
     return self._expressions[name].regex()
 
+  def add_regex(self, regex_str, name):
+    self._expressions[name] = ModExp(regex_str, name, self)
+
   def _has_cycles(self, name):
     return any(name in self._expressions[dep].dependencies for dep in self._expressions[name].dependencies)
 
