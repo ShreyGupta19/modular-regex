@@ -9,8 +9,8 @@ class ModExpTest1(unittest.TestCase):
     self.positive_rational = ModExp(r'~<natural>\.~<natural>', 'positive_rational', env)
 
   def test_dependencies(self):
-    self.assertSetEqual(self.natural.dependencies, set())
-    self.assertSetEqual(self.positive_rational.dependencies, {'natural'})
+    self.assertSetEqual(self.natural.dependencies(), set())
+    self.assertSetEqual(self.positive_rational.dependencies(), {'natural'})
 
   def test_positive_rationals(self):
     self.assertIsNotNone(re.fullmatch(self.positive_rational.regex(), '34.23'))
@@ -25,9 +25,9 @@ class ModExpTest2(unittest.TestCase):
     self.rational = ModExp(r'~<integer>\.~<natural>', 'rational', env)
 
   def test_dependencies(self):
-    self.assertSetEqual(self.natural.dependencies, set())
-    self.assertSetEqual(self.integer.dependencies, set())
-    self.assertSetEqual(self.rational.dependencies, {'natural', 'integer'})
+    self.assertSetEqual(self.natural.dependencies(), set())
+    self.assertSetEqual(self.integer.dependencies(), set())
+    self.assertSetEqual(self.rational.dependencies(), {'natural', 'integer'})
 
   def test_rationals(self):
     self.assertIsNotNone(re.fullmatch(self.rational.regex(), '34.23'))
@@ -46,10 +46,10 @@ class ModExpTest3(unittest.TestCase):
     self.complex_expr = ModExp(r'\(~<expr>\)\s?~<operator>\s?\(~<expr>\)', 'complex_expr', env)
 
   def test_dependencies(self):
-    self.assertSetEqual(self.natural.dependencies, set())
-    self.assertSetEqual(self.operator.dependencies, set())
-    self.assertSetEqual(self.expr.dependencies, {'natural', 'operator'})
-    self.assertSetEqual(self.complex_expr.dependencies, {'expr', 'operator', 'natural'})
+    self.assertSetEqual(self.natural.dependencies(), set())
+    self.assertSetEqual(self.operator.dependencies(), set())
+    self.assertSetEqual(self.expr.dependencies(), {'natural', 'operator'})
+    self.assertSetEqual(self.complex_expr.dependencies(), {'expr', 'operator', 'natural'})
 
   def test_exprs(self):
     self.assertIsNotNone(re.fullmatch(self.expr.regex(), '34 + 43'))
@@ -100,9 +100,9 @@ class ModExpTestChanges(unittest.TestCase):
     self.number = ModExp(r'\d+', 'number', env)
 
   def test_dependencies(self):
-    self.assertSetEqual(self.number.dependencies, set())
-    self.assertSetEqual(self.operator.dependencies, set())
-    self.assertSetEqual(self.expr.dependencies, {'number', 'operator'})
+    self.assertSetEqual(self.number.dependencies(), set())
+    self.assertSetEqual(self.operator.dependencies(), set())
+    self.assertSetEqual(self.expr.dependencies(), {'number', 'operator'})
 
   def test_exprs(self):
     self.assertIsNotNone(re.fullmatch(self.expr.regex(), '34 + 43'))
@@ -121,9 +121,9 @@ class ModExpTestGlobalEnv(unittest.TestCase):
     self.rational = ModExp(r'~<integer>\.~<natural>', 'rational')
 
   def test_dependencies(self):
-    self.assertSetEqual(self.natural.dependencies, set())
-    self.assertSetEqual(self.integer.dependencies, set())
-    self.assertSetEqual(self.rational.dependencies, {'natural', 'integer'})
+    self.assertSetEqual(self.natural.dependencies(), set())
+    self.assertSetEqual(self.integer.dependencies(), set())
+    self.assertSetEqual(self.rational.dependencies(), {'natural', 'integer'})
 
   def test_rationals(self):
     self.assertIsNotNone(re.fullmatch(self.rational.regex(), '34.23'))
